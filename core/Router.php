@@ -8,6 +8,8 @@ class Router {
             '/'         => 'index',
             '/board'    => 'board',
             '/admin'    => 'admin',
+            '/login'    => 'login',
+            '/logout'   => 'logout',
         ];
     }
 

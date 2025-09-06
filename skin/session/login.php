@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+    <h1>로그인</h1>
+    <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+    <form method="post" action="/login">
+        <label>이름: <input type="text" name="username" required></label><br>
+        <label>비밀번호: <input type="password" name="password" required></label><br>
+        <button type="submit">로그인</button>
+    </form>
+</body>
+</html>

@@ -37,3 +37,4 @@ $menu['500'] = [
     ['500000', '파일/업로드 관리', '/admin/files', 'files'],
     ['500100', '첨부파일 관리', '/admin/files/uploads', 'file_uploads'],
 ];
+?>
