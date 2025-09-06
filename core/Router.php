@@ -10,6 +10,7 @@ class Router {
             '/admin'    => 'admin',
             '/login'    => 'login',
             '/logout'   => 'logout',
+            '/register' => 'register',
         ];
     }
 

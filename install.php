@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(50) NOT NULL,
             password VARCHAR(255) NOT NULL,
-            role ENUM('admin','user') DEFAULT 'user',
+            role TINYINT(1) NOT NULL DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ";
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn->query("INSERT INTO `{$db_prefix}users` 
         (username, password, role) VALUES 
-        ('$admin_name', '$admin_pass', 'admin')
+        ('$admin_name', '$admin_pass', 4)
     ");
 
     // dbconfig.php 파일 내용
