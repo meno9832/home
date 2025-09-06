@@ -3,9 +3,12 @@
 <?php
 $menu = [];
 
+$menu0 = [
+    ['000000', '대시보드', '/admin/dashboard', 'dashboard'],
+] ;
 // 환경설정
 $menu['100'] = [
-    ['100000', '환경설정', '/admin/config', 'config'],
+    ['100000', '환경설정', '/admin/config', 'cf_config'],
     ['100100', '사이트 설정', '/admin/config/site', 'cf_basic'],
     ['100200', '메인페이지 관리', '/admin/config/main', 'cf_main'],
     ['100300', '메뉴 관리', '/admin/config/menu', 'cf_menu'],
@@ -14,30 +17,30 @@ $menu['100'] = [
 
 // 게시판 관리
 $menu['200'] = [
-    ['200000', '게시판 관리', '/admin/board', 'board'],
-    ['200200', '게시판 그룹 관리', '/admin/board/groups', 'board_group'],
+    ['200000', '게시판 관리', '/admin/board', 'bo_board'],
+    ['200200', '게시판 그룹 관리', '/admin/board/groups', 'bo_group'],
 ];
 
 // 커뮤니티 기능
 $menu['300'] = [
-    ['300000', '커뮤니티', '/admin/community', 'community'],
-    ['300100', 'DM 관리', '/admin/community/dm', 'dm'],
-    ['300200', '상점 관리', '/admin/community/shop', 'shop'],
-    ['300300', '포인트 관리', '/admin/community/points', 'points'],
-    ['300400', '캐릭터 관리', '/admin/community/characters', 'characters'],
-    ['300500', '신청서 관리', '/admin/community/forms', 'forms'],
+    ['300000', '커뮤니티', '/admin/community', 'co_community'],
+    ['300100', 'DM 관리', '/admin/community/dm', 'co_dm'],
+    ['300200', '상점 관리', '/admin/community/shop', 'co_shop'],
+    ['300300', '포인트 관리', '/admin/community/points', 'co_point'],
+    ['300400', '캐릭터 관리', '/admin/community/characters', 'co_character'],
+    ['300500', '신청서 관리', '/admin/community/forms', 'co_form'],
 ];
 
 // 유저 관리
 $menu['400'] = [
-    ['400000', '유저 관리', '/admin/users', 'users'],
-    ['400200', '활동 내역', '/admin/users/activity', 'user_activity'],
+    ['400000', '유저 관리', '/admin/users', 'us_user'],
+    ['400200', '활동 내역', '/admin/users/activity', 'us_activity'],
 ];
 
 // 파일/업로드 관리
 $menu['500'] = [
-    ['500000', '파일/업로드 관리', '/admin/files', 'files'],
-    ['500100', '첨부파일 관리', '/admin/files/uploads', 'file_uploads'],
+    ['500000', '파일/업로드 관리', '/admin/files', 'fi_file'],
+    ['500100', '첨부파일 관리', '/admin/files/uploads', 'fi_upload'],
 ];
 
 $currentPage = $_GET['page'] ?? 'dashboard';
