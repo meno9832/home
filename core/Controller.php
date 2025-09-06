@@ -41,9 +41,14 @@ class Controller {
     }
     public function admin() {
         $this->authAdmin();
-        include __DIR__ . '/../adm/adhead.php';
-        include __DIR__ . '/../adm/admain.php';
-        include __DIR__ . '/../adm/admenu.php';
+        include __DIR__ . '/../adm/adhead.php'; ?>
+        <div class="container">
+            <?php
+            include __DIR__ . '/../adm/admenu.php';
+            include __DIR__ . '/../adm/admain.php';
+            ?>
+        </div>
+        <?php
     }
     // 로그인 페이지
     public function login() {

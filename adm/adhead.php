@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
+<link rel="stylesheet" href="<?= PATH_CSS ?>/adm.css">
 <head>
     <meta charset="UTF-8">
     <title>관리자 페이지</title>

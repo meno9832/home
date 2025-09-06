@@ -20,8 +20,6 @@ class Router {
         $uri = rtrim($uri, '/');  // 끝 슬래시 제거
         if ($uri === '') $uri = '/';  // 루트 경로 처리
 
-        echo "<pre>URI: "; var_dump($uri); echo "</pre>";
-
         if (isset($this->routes[$uri])) {
             $method = $this->routes[$uri];
 
