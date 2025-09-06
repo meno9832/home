@@ -17,6 +17,8 @@ class Router {
         $uri = rtrim($uri, '/');  // 끝 슬래시 제거
         if ($uri === '') $uri = '/';  // 루트 경로 처리
 
+        echo "<pre>URI: "; var_dump($uri); echo "</pre>";
+
         if (isset($this->routes[$uri])) {
             $method = $this->routes[$uri];
 
@@ -46,7 +48,7 @@ class Router {
             // 라우트가 없으면 404
             http_response_code(404);
             echo "<h1>404 Not Found</h1>";
-            echo "<p>요청하신 페이지를 찾을 수 없습니다.</p>";
+            echo "<p>요청하신 페이지를</p>";
         }
     }
 }

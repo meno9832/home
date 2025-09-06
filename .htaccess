@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    # 리라이트 활성화
+    RewriteEngine On
+
+    # 프로젝트 루트 기준으로 URL 처리
+    RewriteBase /
+
+    # 요청된 파일이나 디렉토리가 실제 존재하면 그대로 사용
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # 실제 파일/디렉토리가 없으면 index.php로 전달
+    RewriteRule ^(.*)$ index.php [L]
+</IfModule>

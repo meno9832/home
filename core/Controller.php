@@ -39,6 +39,6 @@ class Controller {
             header("Location: /login");
             exit;
         }
-        include __DIR__ . '/../admin/adminmain.php';
+        include __DIR__ . '/../admin/admain.php';
     }
 }
