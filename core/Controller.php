@@ -14,7 +14,9 @@ class Controller {
 
     // 홈페이지 메인
     public function index() {
-        include __DIR__ ."/../main.php";
+        include PATH ."/common/head.php";
+        include PATH ."/main.php";
+        include PATH ."/common/footer.php";
     }
 
     // 게시판 처리
@@ -41,11 +43,11 @@ class Controller {
     }
     public function admin() {
         $this->authAdmin();
-        include __DIR__ . '/../adm/adhead.php'; ?>
+        include PATH . '/adm/adhead.php'; ?>
         <div class="container">
             <?php
-            include __DIR__ . '/../adm/admenu.php';
-            include __DIR__ . '/../adm/admain.php';
+            include PATH . '/adm/admenu.php';
+            include PATH . '/adm/admain.php';
             ?>
         </div>
         <?php
@@ -86,7 +88,7 @@ class Controller {
         }
 
         // 로그인 폼 표시
-        include __DIR__ . '/../skin/session/login.php';
+        include PATH . '/skin/session/login.php';
     }
 
     // 로그아웃
@@ -169,6 +171,6 @@ class Controller {
     }
 
     // 회원가입 폼 표시
-    include __DIR__ . '/../skin/session/register.php';
+    include PATH . '/skin/session/register.php';
 }
 }

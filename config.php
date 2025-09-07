@@ -9,7 +9,7 @@ define('DOMAIN_PATH', '');
 define('HTTPS_DOMAIN_PATH', '');  
 
 if (DOMAIN_PATH) {
-    define('URL_PATH', G5_DOMAIN);
+    define('URL_PATH', DOMAIN_PATH);
 } else {
     // 로컬/자동 환경 대응
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
