@@ -71,7 +71,7 @@ if (!$currentPage) {
                 $parentClass = $isOpen ? 'group-open' : '';
             ?>
             
-                <li class="<?= $parentId ?>">
+                <li class="<?= $parentId ?> <?= $parentClass?>">
                     <a href="javascript:void(0)" class= "menus" onclick="toggleSubmenu('<?= $parentId ?>')">
                         <?= $parentName ?>
                     </a>
@@ -104,7 +104,7 @@ if (!$currentPage) {
         });
 
         const submenu = document.getElementById(id);
-        const parentLi = document.getElementById("li_" + id);
+        const parentLi = submenu.parentElement;
 
         if (submenu.style.display === "block") {
             submenu.style.display = "none";

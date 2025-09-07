@@ -26,6 +26,8 @@ if (isset($path['path'])) {
 }
 
 
-define('PATH_CSS', URL_PATH . '/resourse/css');
-define('PATH_JS', URL_PATH . '/resourse/js');
+define('PATH_CSS', URL_PATH . '/resource/css');
+define('PATH_JS', URL_PATH . '/resource/js');
+define('PATH_PLUGIN', URL_PATH . '/resource/plugin');
+define('PATH_REACT', URL_PATH . '/resource/plugin/editor/dist');
 ?>
