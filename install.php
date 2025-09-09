@@ -1,7 +1,7 @@
 <?php
 // 설치 여부 확인
 if (file_exists(__DIR__ . '/data/dbconfig.php')) {
-    die("이미 설치가 완료되었습니다. <a href='index.php'>사이트로 이동</a>");
+    die("이미 설치가 완료되었습니다. <a href='/'>사이트로 이동</a>");
 }
 
 // 설치 처리
@@ -32,6 +32,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ";
     if (!$conn->query($sql_users)) {
         die("❌ users 테이블 생성 실패: " . $conn->error);
+    }
+    $sql_main_module = "
+        CREATE TABLE IF NOT EXISTS `{$db_prefix}main_module` (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            width INT NOT NULL,
+            height INT NOT NULL,
+            x INT NOT NULL,
+            y INT NOT NULL,
+            type VARCHAR(50),
+            con1 TEXT, con2 TEXT, con3 TEXT, con4 TEXT, con5 TEXT, con6 TEXT,
+            con7 TEXT, con8 TEXT, con9 TEXT, con10 TEXT, con11 TEXT,
+            con12 TEXT, con13 TEXT, con14 TEXT, con15 TEXT
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ";
+
+    if (!$conn->query($sql_main_module)) {
+        die("❌ main_module 테이블 생성 실패: " . $conn->error);
+    }
+
+    // grid_setting 초기값 입력 (없으면 추가, 있으면 무시)
+    $sql_insert = "
+        INSERT INTO `{$db_prefix}main_module` (id, name, width, height, x, y)
+        VALUES (1, 'grid_setting', 50, 50, 0, 0)
+        ON DUPLICATE KEY UPDATE width=VALUES(width), height=VALUES(height);
+    ";
+
+    if (!$conn->query($sql_insert)) {
+        die("❌ grid_setting 초기값 입력 실패: " . $conn->error);
+    }
+
+    $sql_site_setting = "
+        CREATE TABLE IF NOT EXISTS `{$db_prefix}site_setting` (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            is_public TINYINT(1) NOT NULL DEFAULT 0,
+            allow_account_create TINYINT(1) NOT NULL DEFAULT 0,
+            allow_character_create TINYINT(1) NOT NULL DEFAULT 0,
+            allow_character_edit TINYINT(1) NOT NULL DEFAULT 0,
+            site_title VARCHAR(255) NOT NULL,
+            site_description TEXT,
+            favicon VARCHAR(255) DEFAULT NULL,
+            main_image VARCHAR(255) DEFAULT NULL,
+            bgm VARCHAR(255) DEFAULT NULL,
+            twitter_widget TEXT
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ";
+    if (!$conn->query($sql_site_setting)) {
+        die("❌ users 테이블 생성 실패: " . $conn->error);
+    }
+    $sql_insert = "
+        INSERT INTO {$db_prefix}site_setting (id, is_public, site_title, site_description) 
+        VALUES (1, 1, '내 홈페이지', '사이트 설명입니다.')
+        ON DUPLICATE KEY UPDATE id=1;
+    ";
+
+    if (!$conn->query($sql_insert)) {
+        die("❌ grid_setting 초기값 입력 실패: " . $conn->error);
     }
 
     // 관리자 계정 생성 (이름 + 비밀번호)

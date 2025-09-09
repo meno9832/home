@@ -4,12 +4,15 @@ class Controller {
     private $db;
 
     public function __construct() {
-        session_start(); // 세션 시작
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         // DB 연결
-        $this->db = new mysqli('localhost', 'root', '', 'homedb');
+        $this->db = new mysqli(DB_HOST, DB_USER,  DB_PASS, DB_NAME,DB_PORT);
         if ($this->db->connect_error) {
             die("DB 연결 실패: " . $this->db->connect_error);
         }
+        $this->db->set_charset("utf8mb4");
     }
 
     // 홈페이지 메인
