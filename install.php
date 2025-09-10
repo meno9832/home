@@ -90,6 +90,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$conn->query($sql_insert)) {
         die("❌ grid_setting 초기값 입력 실패: " . $conn->error);
     }
+    $sql_menu = "
+        CREATE TABLE IF NOT EXISTS `{$db_prefix}menu` (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            icon_img VARCHAR(255) DEFAULT NULL,
+            link VARCHAR(255) DEFAULT NULL,
+            target VARCHAR(20) DEFAULT NULL,
+            order_num INT NOT NULL DEFAULT 0,
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ";
+    if (!$conn->query($sql_site_setting)) {
+        die("❌ users 테이블 생성 실패: " . $conn->error);
+    }
 
     // 관리자 계정 생성 (이름 + 비밀번호)
     $admin_name = $_POST['admin_name'];
