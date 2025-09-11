@@ -4,6 +4,59 @@ require_once PATH .'/data/dbconfig.php';
 $uploadDir = PATH. "/data/system_file/";     // 실제 저장 경로
 $uploadUrl = "/data/system_file/";  
 
+// 업로드 처리 함수
+function handle_upload(array $file, string $prefix, string $uploadDir, string $uploadUrl, array $allowedExt = ['png','jpg','jpeg','gif','ico','svg'], int $maxSize = 5242880) {
+    // $maxSize 기본 5MB
+    if (!isset($file) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        return [ 'success' => false, 'reason' => 'no_file' ];
+    }
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        return [ 'success' => false, 'reason' => 'php_error', 'code' => $file['error'] ];
+    }
+
+    if ($file['size'] > $maxSize) {
+        return [ 'success' => false, 'reason' => 'too_large' ];
+    }
+
+    // MIME/type 검사 (더 안전)
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    // 허용되는 mime 대역을 간단 검사 (이미지 위주)
+    $allowedMimes = ['image/png','image/jpeg','image/gif','image/x-icon','image/vnd.microsoft.icon','image/svg+xml'];
+    if (!in_array($mime, $allowedMimes)) {
+        // 일부 환경에서는 ico의 mime이 다르게 나올 수 있으니 확장자 검사도 함께
+        // 계속 진행해서 확장자 검사로 판정
+    }
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowedExt)) {
+        return [ 'success' => false, 'reason' => 'bad_ext', 'ext' => $ext ];
+    }
+
+    // 파일명 생성 (충돌 방지)
+    try {
+        $rand = bin2hex(random_bytes(6));
+    } catch(Exception $e) {
+        $rand = mt_rand(1000,9999);
+    }
+    $newName = $prefix . '_' . time() . '.' . $ext;
+    $target = $uploadDir . $newName;
+
+    // 실제 업로드 (move_uploaded_file)
+    if (!move_uploaded_file($file['tmp_name'], $target)) {
+        return [ 'success' => false, 'reason' => 'move_failed' ];
+    }
+
+    // 퍼미션 설정 (권장)
+    @chmod($target, 0644);
+
+    // 반환: 웹에서 접근 가능한 경로
+    return [ 'success' => true, 'path' => $uploadUrl . $newName, 'fullpath' => $target ];
+}
+
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
 if ($conn->connect_error) {
     die("DB 연결 실패: " . $conn->connect_error);
@@ -22,23 +75,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $allow_character_create = isset($_POST['allow_character_create']) ? 1 : 0;
     $allow_character_edit   = isset($_POST['allow_character_edit']) ? 1 : 0;
 
+
     // 🟢 파비콘 업로드
-    if (isset($_FILES['favicon']) && $_FILES['favicon']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['favicon']['name'], PATHINFO_EXTENSION);
-        $newName = "favicon_" . time() . "." . $ext;
-        $target = $uploadDir . $newName;
-        if (move_uploaded_file($_FILES['favicon']['tmp_name'], $target)) {
-            $faviconPath = $uploadUrl . $newName;
+    if (isset($_FILES['favicon'])) {
+        $res = handle_upload($_FILES['favicon'], 'favicon', $uploadDir, $uploadUrl);
+        if ($res['success']) {
+            $faviconPath = URL_PATH . '/data/system_file/' . basename($res['path']);
+        } else {
+            // 디버그용: 에러 표시 (운영 환경에서는 로그에만 남길 것)
+            // possible reasons: no_file, php_error, too_large, bad_ext, move_failed...
+            $uploadError = $res;
+            // 예: $message = "파비콘 업로드 실패: " . json_encode($uploadError);
         }
     }
 
     // 🟢 대표 이미지 업로드
-    if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['main_image']['name'], PATHINFO_EXTENSION);
-        $newName = "main_" . time() . "." . $ext;
-        $target = $uploadDir . $newName;
-        if (move_uploaded_file($_FILES['main_image']['tmp_name'], $target)) {
-            $mainImagePath = $uploadUrl . $newName;
+    if (isset($_FILES['main_image'])) {
+        $res = handle_upload($_FILES['main_image'], 'main_image', $uploadDir, $uploadUrl);
+        if ($res['success']) {
+            $mainImagePath = URL_PATH . '/data/system_file/' . basename($res['path']);
+        } else {
+            // 디버그용: 에러 표시 (운영 환경에서는 로그에만 남길 것)
+            $uploadError = $res;
+            // 예: $message = "대표 이미지 업로드 실패: " . json_encode($uploadError);
         }
     }
 
@@ -53,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $is_public,
         $_POST['site_title'],
         $_POST['site_description'],
-        $_POST['favicon'],
-        $_POST['main_image'],
+        $faviconPath,
+        $mainImagePath,
         $_POST['bgm'],
         $_POST['twitter_widget'],
         $allow_account_create,
@@ -97,7 +156,7 @@ $conn->close();
 <body>
     <h1>사이트 기본 설정</h1>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label>
                 <input type="checkbox" name="is_public" value="1" 
