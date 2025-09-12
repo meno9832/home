@@ -7,7 +7,7 @@ if ($conn->connect_error) {
 $conn->set_charset(DB_CHARSET);
 
 // 사이트 설정 불러오기
-$sql = "SELECT favicon, site_title FROM " . DB_PREFIX ."site_setting WHERE id=1 LIMIT 1";
+$sql = "SELECT * FROM " . DB_PREFIX ."site_setting WHERE id=1 LIMIT 1";
 $result = $conn->query($sql);
 $settings = $result->fetch_assoc();
 $conn->close();
@@ -17,4 +17,9 @@ $conn->close();
 <head>
     <link rel="icon" href="<?= htmlspecialchars($settings['favicon']) ?>">
     <title><?= htmlspecialchars($settings['site_title']) ?></title>
+    <link rel="icon" href="<?= htmlspecialchars($settings['favicon']) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="<?= htmlspecialchars($settings['main_image']) ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($settings['site_description']) ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($settings['site_title']) ?>">
 </head>
