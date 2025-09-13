@@ -46,7 +46,7 @@ $(function(){
             // 삭제
             $mod.find('.btn-delete').click(function(){
                 if(confirm("삭제하시겠습니까?")){
-                    $.post('/adm/detail/save.php', {action:'delete', id:m.id}, function(){
+                    $.post('/adm/detail/save.php', {action:'delete', table: "<?= DB_PREFIX ?>main_module", id:m.id}, function(){
                         MODULES = MODULES.filter(x=>x.id!=m.id);
                         renderModules();
                     });
@@ -67,6 +67,7 @@ $(function(){
         const pos = $mod.position();
         $.post('/adm/detail/save.php', {
             action:'update',
+            table: "<?= DB_PREFIX ?>main_module",
             id:id,
             x:pos.left,
             y:pos.top,
@@ -79,7 +80,7 @@ $(function(){
     $('#saveGridSize').click(function(){
         const newSize = parseInt($('#gridSizeInput').val());
         if(newSize>0){
-            $.post('/adm/detail/save.php', {action:'update_grid', size:newSize}, function(){
+            $.post('/adm/detail/save.php', {action:'update_grid', table: "<?= DB_PREFIX ?>main_module", size:newSize}, function(){
                 GRID_SIZE = newSize;
                 renderGridBackground();
                 renderModules();
@@ -89,10 +90,9 @@ $(function(){
 
     // 모듈 추가
     $('#addModule').click(function(){
-        $.post('/adm/detail/save.php', {action:'add', name:'새 모듈'}, function(data){
-            const newModule = JSON.parse(data);
-            MODULES.push(newModule);
+        $.post('/adm/detail/save.php', {action:'add', table: "<?= DB_PREFIX ?>main_module", name:'새 모듈'}, function(res){
+            MODULES.push(res.data);
             renderModules();
-        });
+        }, 'json');
     });
 });

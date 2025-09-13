@@ -106,9 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql_board_group = "
         CREATE TABLE IF NOT EXISTS `{$db_prefix}board_group` (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            table VARCHAR(255) NOT NULL,
+            table_id VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
-            auth_role TINYINT(1) NOT NULL DEFAULT 0,
+            auth_role TINYINT(1) NOT NULL DEFAULT 0
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ";
     if (!$conn->query($sql_board_group)) {
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $sql_insert = "
-        INSERT INTO {$db_prefix}board_group (id, table, name, auth_role) 
+        INSERT INTO {$db_prefix}board_group (id, table_id, name, auth_role) 
         VALUES (1, 'home', 'HOME', '0')
         ON DUPLICATE KEY UPDATE id=1;
     ";
@@ -127,10 +127,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql_board = "
         CREATE TABLE IF NOT EXISTS `{$db_prefix}board` (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            table VARCHAR(255) NOT NULL PRIMARY KEY,
+            table_id VARCHAR(255) NOT NULL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             group_id varchar(255) NOT NULL,
-            auth_role TINYINT(1) NOT NULL DEFAULT 0,
+            auth_role TINYINT(1) NOT NULL DEFAULT 0
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ";
     if (!$conn->query($sql_board)) {
