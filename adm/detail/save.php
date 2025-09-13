@@ -1,4 +1,5 @@
 <?php
+define('IN_ADMIN', true);
 require_once __DIR__ .'/../../data/dbconfig.php';
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET,
     DB_USER,
@@ -54,22 +55,54 @@ if ($table == 'main_module') {
     $table_ids  = $_POST['table_id'] ?? [];
     $names      = $_POST['name'] ?? [];
     $auth_roles = $_POST['auth_role'] ?? [];
+}
+
+if ($table === 'board_group') {
+
+    if($action === 'delete' && !empty($_POST['id'])){
+        $id = $_POST['id'];
+        $stmt = $pdo->prepare("DELETE FROM " . DB_PREFIX . "board_group WHERE id=?");
+        if($stmt->execute([$id])){
+            echo json_encode(['ok' => true]);
+        } else {
+            echo 'fail';
+        }
+        exit;
+    }
+
+    $ids        = $_POST['id'] ?? [];
+    $table_ids  = $_POST['table_id'] ?? [];
+    $names      = $_POST['name'] ?? [];
+    $auth_roles = $_POST['auth_role'] ?? [];
 
     if ($ids && count($ids) === count($table_ids) && count($ids) === count($names) && count($ids) === count($auth_roles)) {
-        $stmt = $pdo->prepare("UPDATE " . DB_PREFIX . "board_group 
-                               SET table_id=?, name=?, auth_role=? 
-                               WHERE id=?");
-        
+
+        // UPDATE 준비 (기존 행)
+        $stmtUpdate = $pdo->prepare("UPDATE " . DB_PREFIX . "board_group 
+                                     SET table_id=?, name=?, auth_role=? 
+                                     WHERE id=?");
+
+        // INSERT 준비 (신규 행)
+        $stmtInsert = $pdo->prepare("INSERT INTO " . DB_PREFIX . "board_group (table_id, name, auth_role) 
+                                     VALUES (?, ?, ?)");
+
         foreach ($ids as $i => $id) {
-            $stmt->execute([
-                $table_ids[$i],
-                $names[$i],
-                $auth_roles[$i],
-                $id
-            ]);
+            $table_id = $table_ids[$i];
+            $name     = $names[$i];
+            $auth     = $auth_roles[$i];
+
+            if ($id) { 
+                // 기존 행 → UPDATE
+                $stmtUpdate->execute([$table_id, $name, $auth, $id]);
+            } else {  
+                // 신규 행 → INSERT
+                $stmtInsert->execute([$table_id, $name, $auth]);
+            }
         }
 
-        echo "ok";
+        // 저장 완료 후 원래 페이지로 리다이렉트
+        header("Location: /admin?page=bo_group");
+        exit;
     } else {
         echo "error: invalid data";
     }

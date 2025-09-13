@@ -46,6 +46,7 @@ class Controller {
     }
     public function admin() {
         $this->authAdmin();
+        define('IN_ADMIN', true);
         include PATH . '/adm/adhead.php'; ?>
         <div class="container">
             <?php

@@ -1,5 +1,10 @@
 <?php
 require_once PATH .'/data/dbconfig.php';
+
+if (!defined('IN_ADMIN')) {
+    require_once PATH . '/index.php'; 
+    exit;
+}
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET,
     DB_USER,
     DB_PASS, [

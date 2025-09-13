@@ -1,6 +1,10 @@
 <?php
 require_once PATH .'/data/dbconfig.php';
 
+if (!defined('IN_ADMIN')) {
+    require_once PATH . '/index.php'; 
+    exit;
+}
 $uploadDir = PATH. "/data/system_file/";     // 실제 저장 경로
 $uploadUrl = "/data/system_file/";  
 

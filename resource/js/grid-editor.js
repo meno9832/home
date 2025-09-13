@@ -55,11 +55,9 @@ $(function(){
 $grid.on('click', '.btn-delete', function(){
     const $mod = $(this).closest('.module');
     const id = $mod.data('id');
-    console.log("삭제 전 MODULES:", MODULES);
     if(confirm("삭제하시겠습니까?")){
         $.post('/adm/detail/save.php', {action:'delete', table: "main_module", id:id}, function(){
             MODULES = MODULES.filter(x => String(x.id) !== String(id));
-            console.log("삭제 후 MODULES:", MODULES);
             renderModules(); // 즉시 반영
         });
     }
