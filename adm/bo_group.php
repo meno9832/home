@@ -31,7 +31,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <h2 style="text-align:center;">Board Group 목록</h2>
-    <form method="post" action="save.php">
+    <form method="post" action= "/adm/detail/save.php">
+        <input type="hidden" name="table" value="board_group">
     <table>
         <thead>
             <tr>
