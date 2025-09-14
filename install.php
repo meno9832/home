@@ -127,10 +127,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql_board = "
         CREATE TABLE IF NOT EXISTS `{$db_prefix}board` (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            table_id VARCHAR(255) NOT NULL PRIMARY KEY,
+            table_id VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             group_id varchar(255) NOT NULL,
-            auth_role TINYINT(1) NOT NULL DEFAULT 0
+            category VARCHAR(255) DEFAULT NULL,
+            use_category TINYINT(1) NOT NULL DEFAULT 0,
+            skin VARCHAR(255) DEFAULT 'basic',
+            password VARCHAR(255) DEFAULT NULL,
+
+            auth_list TINYINT(1) NOT NULL DEFAULT 0,
+            auth_read TINYINT(1) NOT NULL DEFAULT 0,
+            auth_write TINYINT(1) NOT NULL DEFAULT 0,
+            auth_comment TINYINT(1) NOT NULL DEFAULT 0,
+            modify_level INT NOT NULL DEFAULT 1,
+            delete_level INT NOT NULL DEFAULT 1,
+            secret_level TINYINT(1) NOT NULL DEFAULT 0,
+            use_noname TINYINT(1) NOT NULL DEFAULT 0,
+            file_count INT NOT NULL DEFAULT 1,
+            file_size INT NOT NULL DEFAULT 512,
+            use_html_editor TINYINT(1) NOT NULL DEFAULT 0,
+            txt_min INT NOT NULL DEFAULT 0,
+            txt_max INT NOT NULL DEFAULT 0,
+            comment_min INT NOT NULL DEFAULT 0,
+            comment_max INT NOT NULL DEFAULT 0,
+
+            content_top TEXT,
+            insert_content TEXT,
+
+            page_row INT NOT NULL DEFAULT 10,
+            image_width INT NOT NULL DEFAULT 600,
+            new_icon_hour INT NOT NULL DEFAULT 24,
+            reply_order TINYINT(1) NOT NULL DEFAULT 0,
+            list_order TINYINT(1) NOT NULL DEFAULT 0,
+            read_point INT NOT NULL DEFAULT 0,
+            write_point INT NOT NULL DEFAULT 0,
+            comment_point INT NOT NULL DEFAULT 0,
+
+            con_txt_1 VARCHAR(255) DEFAULT NULL, con_txt_2 VARCHAR(255) DEFAULT NULL, con_txt_3 VARCHAR(255) DEFAULT NULL,
+            con_txt_4 VARCHAR(255) DEFAULT NULL,con_txt_5 VARCHAR(255) DEFAULT NULL,con_txt_6 VARCHAR(255) DEFAULT NULL,
+            con_txt_7 VARCHAR(255) DEFAULT NULL,con_txt_8 VARCHAR(255) DEFAULT NULL,con_txt_9 VARCHAR(255) DEFAULT NULL,
+            con_txt_10 VARCHAR(255) DEFAULT NULL,
+            con_1 varchar(255) DEFAULT NULL, con_2 varchar(255) DEFAULT NULL, con_3 varchar(255) DEFAULT NULL,
+            con_4 varchar(255) DEFAULT NULL, con_5 varchar(255) DEFAULT NULL, con_6 varchar(255) DEFAULT NULL,
+            con_7 varchar(255) DEFAULT NULL, con_8 varchar(255) DEFAULT NULL, con_9 varchar(255) DEFAULT NULL,
+            con_10 varchar(255) DEFAULT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ";
     if (!$conn->query($sql_board)) {

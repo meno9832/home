@@ -46,6 +46,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Table ID</th>
                 <th>Name</th>
                 <th>Auth Role</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -135,6 +136,9 @@ $(function(){
                         <option value="3">관리자</option>
                         <option value="4">최고관리자</option>
                     </select>
+                </td>
+                <td>
+                    <button type="button" class="btn-delete">삭제</button>
                 </td>
             </tr>
         `;
