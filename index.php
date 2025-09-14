@@ -1,7 +1,7 @@
 <?php
 // DB 설정 확인
 if (!file_exists(__DIR__ . '/data/dbconfig.php')) {
-    header("Location: install.php");
+    header("Location: install/install.php");
     exit;
 }
 

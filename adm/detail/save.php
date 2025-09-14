@@ -172,17 +172,6 @@ if($table === 'board'){
 
             // 중복 없음 → INSERT
             $stmtInsert->execute([$table_id, $name, $group_id, $skin]);
-
-            // 게시판 테이블 생성 (간단 예시)
-            $sql = "CREATE TABLE " . DB_PREFIX . "board_". $table_id . " (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                subject VARCHAR(255) NOT NULL,
-                content TEXT NOT NULL,
-                writer VARCHAR(100),
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
-
-            $pdo->exec($sql);
         }
     }
 
