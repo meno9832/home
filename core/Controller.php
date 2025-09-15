@@ -17,6 +17,8 @@ class Controller {
 
     // 홈페이지 메인
     public function index() {
+        $result = $this->db->query("SELECT * FROM ".DB_PREFIX."board");
+        $boards = $result->fetch_all(MYSQLI_ASSOC);
         include PATH ."/common/head.php";
         include PATH ."/main.php";
         include PATH ."/common/footer.php";
@@ -24,21 +26,29 @@ class Controller {
 
     // 게시판 처리
     public function board() {
-        $board_name = $_GET['board'] ?? 'default';
+        $board_id = $_GET['board'] ?? 'default';
         $view = $_GET['view'] ?? 'list';
 
-        // DB 연결 예시는 나중에 추가 가능
-        // $conn = new mysqli(...);
+        // DB 연결 (컨트롤러에 이미 $this->db 있다고 가정)
+        $stmt = $this->db->prepare("SELECT skin FROM ".DB_PREFIX."board WHERE table_id = ?");
+        $stmt->bind_param("s", $board_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $board = $result->fetch_assoc();
 
+        if (!$board) {
+            echo "<p>존재하지 않는 게시판입니다.</p>";
+            return;
+        }
+
+        $skin = $board['skin'] ?: 'default'; // 스킨이 없으면 기본값 사용
+        $skin_path = PATH_SKIN . "/{$skin}";
+        
         if ($view === 'list') {
-            echo "<h2>게시판 목록: {$board_name}</h2>";
-            echo "<ul>
-                    <li>예시 게시물 1</li>
-                    <li>예시 게시물 2</li>
-                  </ul>";
+            include $skin_path . "/list.php";
         } elseif ($view === 'detail') {
             $id = $_GET['id'] ?? 0;
-            echo "<h2>게시글 상세: {$board_name} / ID: {$id}</h2>";
+            echo "<h2>게시글 상세: {$board_id} / ID: {$id}</h2>";
             echo "<p>게시글 내용 예시</p>";
         } else {
             echo "<p>존재하지 않는 뷰: {$view}</p>";
