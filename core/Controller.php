@@ -28,9 +28,11 @@ class Controller {
     public function board() {
         $board_id = $_GET['board'] ?? 'default';
         $view = $_GET['view'] ?? 'list';
+        
+        $db = $this->db;
 
         // DB 연결 (컨트롤러에 이미 $this->db 있다고 가정)
-        $stmt = $this->db->prepare("SELECT skin FROM ".DB_PREFIX."board WHERE table_id = ?");
+        $stmt = $this->db->prepare("SELECT * FROM ".DB_PREFIX."board WHERE table_id = ?");
         $stmt->bind_param("s", $board_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -41,16 +43,17 @@ class Controller {
             return;
         }
 
-        $skin = $board['skin'] ?: 'default'; // 스킨이 없으면 기본값 사용
+        $skin = $board['skin']; // 스킨이 없으면 기본값 사용
         $skin_path = PATH_SKIN . "/{$skin}";
         
         if ($view === 'list') {
             include $skin_path . "/list.php";
-        } elseif ($view === 'detail') {
+        } elseif ($view === 'view') {
             $id = $_GET['id'] ?? 0;
-            echo "<h2>게시글 상세: {$board_id} / ID: {$id}</h2>";
-            echo "<p>게시글 내용 예시</p>";
-        } else {
+            include $skin_path . "/view.php";
+        } elseif ($view === 'write') {
+            include $skin_path . "/write.php";
+        }else {
             echo "<p>존재하지 않는 뷰: {$view}</p>";
         }
     }
