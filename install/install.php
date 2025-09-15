@@ -20,8 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $conn->set_charset("utf8mb4");
 
-    $sql = file_get_contents('install_table.sql');
-    if ($conn->multi_query($sql)) {  // multi_query 사용 가능 (여러 쿼리 포함 가능)
+    include __DIR__ . '/install_table.php';
+
+    // 실행
+    if ($conn->multi_query($sql)) {
         do {
             if ($result = $conn->store_result()) {
                 $result->free();
@@ -29,14 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } while ($conn->more_results() && $conn->next_result());
         echo "✅ 테이블 생성 완료!";
     } else {
-        echo "❌ 에러: " . $conn->error;
+        echo "❌ SQL 실행 오류: " . $conn->error;
     }
 
     // 관리자 계정 생성 (이름 + 비밀번호)
     $admin_name = $_POST['admin_name'];
     $admin_pass = password_hash($_POST['admin_pass'], PASSWORD_BCRYPT);
 
-    $conn->query("INSERT INTO `maru_users` 
+    $conn->query("INSERT INTO `{$db_prefix}users` 
         (username, password, role) VALUES 
         ('$admin_name', '$admin_pass', 4)
     ");
@@ -61,7 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     file_put_contents(__DIR__ . '/../data/dbconfig.php', $dbconfig_content);
 
     // .htaccess 생성 (data 폴더 접근 제한)
-    $htaccess_content = `<FilesMatch "\.(htaccess|htpasswd|[Pp][Hh][Pp]|[Pp]?[Hh][Tt][Mm][Ll]?|[Ii][Nn][Cc]|[Cc][Gg][Ii]|[Pp][Ll])">\nOrder allow,deny\nDeny from all\n</FilesMatch>`;
+    $htaccess_content = <<<HTA
+    <FilesMatch "\.(htaccess|htpasswd|[Pp][Hh][Pp]|[Pp]?[Hh][Tt][Mm][Ll]?|[Ii][Nn][Cc]|[Cc][Gg][Ii]|[Pp][Ll])">
+    Order allow,deny
+    Deny from all
+    </FilesMatch>`;
+    HTA;
     file_put_contents(__DIR__ . '/../data/.htaccess', $htaccess_content);
 
     echo "<h2>✅ 설치 완료!</h2>";

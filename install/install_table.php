@@ -1,7 +1,8 @@
--- -------------------------------------------
+<?php
 
--- 유저 테이블
-CREATE TABLE IF NOT EXISTS `maru_users` (
+
+$sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `{$db_prefix}users` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
@@ -10,8 +11,7 @@ CREATE TABLE IF NOT EXISTS `maru_users` (
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- 메인 화면 모듈
-CREATE TABLE IF NOT EXISTS `maru_main_module` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}main_module` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             width INT NOT NULL,
@@ -24,15 +24,13 @@ CREATE TABLE IF NOT EXISTS `maru_main_module` (
             con12 TEXT, con13 TEXT, con14 TEXT, con15 TEXT
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 그리드 삽입
-INSERT INTO `maru_main_module` (id, name, width, height, x, y)
+INSERT INTO `{$db_prefix}main_module` (id, name, width, height, x, y)
         VALUES (1, 'grid_setting', 50, 50, 0, 0)
         ON DUPLICATE KEY UPDATE width=VALUES(width), height=VALUES(height);
 
 
 
--- 사이트 기본 설정
-CREATE TABLE IF NOT EXISTS `maru_site_setting` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}site_setting` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             is_public TINYINT(1) NOT NULL DEFAULT 0,
             allow_account_create TINYINT(1) NOT NULL DEFAULT 0,
@@ -46,14 +44,12 @@ CREATE TABLE IF NOT EXISTS `maru_site_setting` (
             twitter_widget TEXT
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 기본 설정 삽입
-INSERT INTO maru_site_setting (id, is_public, site_title, site_description) 
+INSERT INTO {$db_prefix}site_setting (id, is_public, site_title, site_description) 
         VALUES (1, 1, '내 홈페이지', '사이트 설명입니다.')
         ON DUPLICATE KEY UPDATE id=1;
 
 
--- 메뉴 테이블
-CREATE TABLE IF NOT EXISTS `maru_menu` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}menu` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             icon_img VARCHAR(255) DEFAULT NULL,
@@ -63,22 +59,19 @@ CREATE TABLE IF NOT EXISTS `maru_menu` (
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- 게시판 그룹 테이블
-CREATE TABLE IF NOT EXISTS `maru_board_group` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}board_group` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             table_id VARCHAR(255) NOT NULL UNIQUE,
             name VARCHAR(255) NOT NULL,
             auth_role TINYINT(1) NOT NULL DEFAULT 0
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 기본 게시판 그룹 삽입
-INSERT INTO maru_board_group (id, table_id, name, auth_role) 
+INSERT INTO {$db_prefix}board_group (id, table_id, name, auth_role) 
         VALUES (1, 'home', 'HOME', '0')
         ON DUPLICATE KEY UPDATE id=1;
 
 
--- 게시판 테이블
-CREATE TABLE IF NOT EXISTS `maru_board` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}board` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             table_id VARCHAR(255) NOT NULL UNIQUE,
             name VARCHAR(255) NOT NULL,
@@ -127,8 +120,7 @@ CREATE TABLE IF NOT EXISTS `maru_board` (
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- 게시글 테이블
-CREATE TABLE IF NOT EXISTS `maru_board_post` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}board_post` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             board_id VARCHAR(255) NOT NULL UNIQUE,
             name VARCHAR(255) NOT NULL,
@@ -159,8 +151,7 @@ CREATE TABLE IF NOT EXISTS `maru_board_post` (
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- 댓글 테이블
-CREATE TABLE IF NOT EXISTS `maru_board_comment` (
+CREATE TABLE IF NOT EXISTS `{$db_prefix}board_comment` (
             id BIGINT AUTO_INCREMENT PRIMARY KEY,
             post_id BIGINT NOT NULL,
             user_id INT NOT NULL,
@@ -178,3 +169,5 @@ CREATE TABLE IF NOT EXISTS `maru_board_comment` (
             INDEX(parent_comment_id)
 
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+SQL;
+?>
