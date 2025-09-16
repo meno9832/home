@@ -20,6 +20,7 @@ $result = $db->query($sql);
 ?>
 
 <h2><?= htmlspecialchars($board['name']) ?> 게시판</h2>
+<a href="/" class="btn">홈</a>
 
 <a href="/board?board=<?= $board['table_id'] ?>&view=write" class="btn">글쓰기</a>
 

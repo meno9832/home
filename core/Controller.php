@@ -53,6 +53,23 @@ class Controller {
             include $skin_path . "/view.php";
         } elseif ($view === 'write') {
             include $skin_path . "/write.php";
+        } elseif ($view === "delete") {
+            if ($_GET['id']) {
+            $stmt = $db->prepare("
+                DELETE FROM " . DB_PREFIX . "board_post
+                WHERE id=?
+            ");
+            $stmt->bind_param("i", $_GET['id']);
+            if ($stmt->execute()) {
+                echo "<p>✅ 글이 삭제되었습니다.</p>";
+                echo "<a href=\"/board?board=" . $board['table_id'] . "&view=list\">목록으로 돌아가기</a>";
+                exit;
+            } else {
+                echo "<p>❌ 글 삭제 중 오류가 발생했습니다.</p>";
+            }
+            } else {
+                echo "<p>❌ 삭제할 글 ID가 지정되지 않았습니다.</p>";
+            }
         }else {
             echo "<p>존재하지 않는 뷰: {$view}</p>";
         }

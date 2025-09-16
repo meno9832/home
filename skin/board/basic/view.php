@@ -58,8 +58,11 @@ if (!$post) {
 
     <footer>
         <a href="/board?board=<?= $board_name ?>&view=list">목록</a> |
-        <?php if ($post['id'] == $_SESSION['user']['id'] || $_SESSION['user']['role'] >= 3): ?>
+        <?php if ($post['id'] == $_SESSION['user']['id']): ?>
         <a href="/board?board=<?= $board_name ?>&view=write&id=<?= $post['id'] ?>">수정</a>
+        <?php endif; ?>
+        <?php if ($post['id'] == $_SESSION['user']['id'] || $_SESSION['user']['role'] >= 3): ?>
+        <a href="/board?board=<?= $board_name ?>&view=delete&id=<?= $post['id'] ?>">삭제</a>
         <?php endif; ?>
     </footer>
 </article>
