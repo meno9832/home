@@ -38,7 +38,7 @@ $result = $db->query($sql);
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td>
-                        <a href="?board=<?= urlencode($board_name) ?>&view=detail&id=<?= $row['id'] ?>">
+                        <a href="?board=<?=$board['table_id'] ?>&view=view&id=<?= $row['id'] ?>">
                             <?= htmlspecialchars($row['title']) ?>
                         </a>
                     </td>
