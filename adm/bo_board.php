@@ -87,7 +87,9 @@ $folderNames = array_map('basename', $folders);
                                 </select>
                             </td>
                             <td>
-                                <button type="button" class="btn-mod">수정</button>
+                                <button type="button" class="btn-mod"
+                                    onclick="window.location.href='/admin?page=bo_board&detail=edit_board&id=<?= $row['table_id'] ?>'"
+                                    >수정</button>
                                 <button type="button" class="btn-delete">삭제</button>
                             </td>
                         </tr>

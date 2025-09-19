@@ -70,6 +70,7 @@ class Controller {
             } else {
                 echo "<p>❌ 삭제할 글 ID가 지정되지 않았습니다.</p>";
             }
+            
         }else {
             echo "<p>존재하지 않는 뷰: {$view}</p>";
         }
